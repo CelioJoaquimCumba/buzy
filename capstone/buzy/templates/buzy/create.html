@@ -1,0 +1,47 @@
+{% extends "buzy/layout.html" %}
+{% load static %}
+
+{% block title %}
+    Create Project
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+    <h1 class="primary-color">Create project</h1>
+    <form action={%if not project %}"{% url 'create'  %}"{% else %}"{% url 'edit' project.id %}"{% endif %} method="post" id="create_form">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="name_form" class="form-label">Name:</label>
+        <input {% if project%}disabled value={{project.name}} {% endif %} type="text" class="form-control" id="name_form" name="name" placeholder="Name">
+      </div>
+      <div class="mb-3">
+        <label for="description_form" class="form-label">Description:</label>
+        <textarea form="create_form" class="form-control" id="description_form" rows="3" name="description" placeholder="Description">{% if project%} {{project.description}} {%endif %}</textarea>
+      </div>
+      
+      <div class="mb-3">
+        <label for="members_form" class="form-label">Members:</label><br>
+        <select id="members_form" class="form-select" aria-label="multiple select example" name="members" multiple>
+          <option value="{{user.id}}" selected>{{user.username}}</option>
+          {% for follow in following %}
+          <option value="{{follow.id}}"{% if follow in project.members.all %} selected {% endif %}>{{follow.username}}</option>
+          {% endfor %}
+        </select>
+        <i>ps:To select/unselect multiple member click while pressing ctrl-key</i>
+      </div>
+      <div class="mb-3">
+        <label for="revenue_form" class="form-label">Revenue {% if not project %}initial:{% endif %}</label>
+        <input type="text" class="form-control" id="revenue_form" name="revenue" placeholder="Revenue"
+         {% if project %}disabled value="{{project.revenue}}" {% endif %}>
+      </div>
+      <button type="submit" class="btn btn-primary" style="background-color: #03045e;">{% if project %}Edit{% else %}Create{% endif %}</button>
+
+    </form>
+
+    
+  </div>
+
+    
+{% endblock %}

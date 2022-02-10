@@ -1,0 +1,20 @@
+.container{
+    height: 100vh;
+}
+
+
+.b-secondary-color{
+    background-color: #0077b6;
+}
+
+.b-primary-color{
+    background-color: #03045e;
+}
+.secondary-color{
+    color: #0077b6;
+}
+
+.primary-color{
+    color: #03045e;
+}
+

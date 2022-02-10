@@ -1,0 +1,47 @@
+{% extends "buzy/layout.html" %}
+{% load static %}
+
+{% block title %}
+    index
+{% endblock %}
+
+{% block style %}
+<style>
+    h1{
+        color: red;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+{% if projects %}
+        <div class="container "  style="background-color: white;">
+            <h1 class="primary-color">Projects</h1>
+            {% for project in projects %} 
+            <div class="row border rounded" style="margin-bottom: 30px;">
+                <div class="col-2 border b-primary-color" >
+                  
+                </div>
+                <div class="col-10 border">
+                    <h1 class="primary-color">{{project.name}}</h1>
+                    <hr>
+                    <p class="primary-color">
+                        {{project.description}}
+                    </p>
+                    <bold class="primary-color">Host:{{project.host}}</bold>
+                    <p class="primary-color">
+                        <i>Income:{{project.income}}</i>
+                    </p>
+                    <i class="primary-color">{{project.timestamp}}</i>
+                    <br>
+                    <hr>
+                    <a href="{% url 'project' project.id %}"><button type="button"  class="btn btn-primary visit_button" style="background-color: #03045e;">Visit</button></a>
+                </div>
+                
+            </div>
+            {% endfor %}
+        </div>
+{% else %}
+<i>No projects available</i>   
+{% endif %}
+{% endblock %}

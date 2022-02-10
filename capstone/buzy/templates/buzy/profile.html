@@ -1,0 +1,52 @@
+{% extends "buzy/layout.html" %}
+{% load static %}
+
+{% block title %}
+    Profile
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+    <h1 class="secondary-color">Profile</h1>
+    <h4 class="secondary-color">ID:<strong class="primary-color">{{user.id}}</strong></h2>
+    <h4 class="secondary-color">Username:<strong class="primary-color">{{user.username}}</strong></h2>
+    <h4 class="secondary-color">Email:<strong class="primary-color">{{user.email}}</strong></h2>
+    <h4 class="secondary-color">Following:</h2>
+    {% if following %}
+    
+        <ul class="list-group list-group-flush">
+            {% for follow in following %}
+            <li class="list-group-item primary-color">Username:{{follow.username}},ID:{{follow.id}}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <i>You are not following anyone</i>
+    {% endif %}
+
+    <hr>
+
+    {% if message %}
+    <i>{{message}}</i>
+    {% endif %}
+    <h1 class="secondary-color">Start following</h1>
+    <form action="{% url 'profile' %}" method="post" id="following_form" >
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="id_form" class="form-label primary-color">ID:</label>
+          <input type="text" list="users" class="form-control" id="color_form" name="id" placeholder="ID" autocomplete="off">
+                  <datalist id="users">
+                      {% for user in users%}
+                      <option value="{{user.id}}">{{user.username}}</option>
+                      {% endfor %}
+                    
+                  </datalist>
+                  <i>PS: You can write the user username and click in the list to get the id</i>
+        </div>
+        <button type="submit" name="action" value="follow" class="btn btn-primary" style="background-color: #0077b6;">Follow</button>
+        <button type="submit" name="action" value="unfollow" class="btn btn-primary" style="background-color: #b60037;">Unfollow</button>
+    </form>
+
+    
+{% endblock %}

@@ -1,0 +1,317 @@
+{% extends "buzy/layout.html" %}
+{% load static %}
+
+{% block title %}
+    Project
+{% endblock %}
+
+
+{% block body %}
+
+<!--View Project Details-->
+<div class="container">
+  
+  
+    <h1 style="color: #03045e;">Project</h1>
+
+    <form  id="project_form">
+      <input hidden name="form" value="edit_project">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label for="name_form" class="form-label"  >Name:</label>
+        <input disabled type="text" class="form-control" id="name_form" name="name" placeholder="Name" value="{{project.name}}">
+      </div>
+
+      <div class="mb-3">
+        <label for="description_form" class="form-label"  >Description:</label>
+        <textarea disabled form="project_form" class="form-control" id="description_form" rows="3" name="description" placeholder="Description"
+        >{{project.description}}</textarea>
+      </div>
+
+      <div class="mb-3">
+        <label for="host_form" class="form-label"  >Host:</label>
+        <input disabled type="text" class="form-control" id="host_form" name="host" placeholder="Host" value={{project.host}}>
+      </div>
+
+      <div class="mb-3">
+        <label for="timestamp_form" class="form-label"  >Timestamp:</label>
+        <input disabled type="text" class="form-control" id="timestamp_form" name="timestamp" placeholder="timestamp" 
+        value="{{project.timestamp.date}} {{project.timestamp.time}}">
+      </div>
+
+      <div class="mb-3">
+        <label for="members_form" class="form-label">Members:</label><br>
+        <select id="members_form" disabled class="form-select" aria-label="multiple select example" name="members" multiple>
+          {% for member in project.members.all %}
+            <option value="{{member.id}}">{{member.username}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="revenue_form" class="form-label" >Revenue:</label>
+        <input disabled type="number" class="form-control" id="revenue_form" name="revenue" placeholder="Revenue" value={{project.revenue}}>
+      </div>
+
+      <div class="mb-3">
+        <label for="income_form" class="form-label"  >Income:</label>
+        <input disabled type="number" class="form-control" id="income_form" name="income" placeholder="income" value={{project.income}}>
+      </div>
+
+      <a href="{% url 'edit' project.id %}"><button type="button" class="btn btn-primary" style="background-color: #03045e;">edit</button></a>
+
+    </form>
+    <!--End of project details-->
+    <hr>
+
+
+    <div id="accordion">
+      <div class="card">
+        <div class="card-header" id="create_client_heading">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#create_client" aria-expanded="true" aria-controls="collapseOne">
+              <h4 class="primary-color">Create Client</h4>
+            </button>
+          </h5>
+        </div>
+    
+        <div id="create_client" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+          <!--Create client-->
+          
+          <form  method="post" action="{% url 'project' project.id %}" id="createClient_form">
+            <input hidden name="form" value="createClient_form">
+            {% csrf_token %}
+
+            <div class="mb-3" id="div_client_name">
+              <input type="text" required class="form-control" id="client_name_form" name="client_name" placeholder="Name" autocomplete="off">
+            </div>
+            <div class="mb-3" id="div_prodct_selling_price">
+                <input type="tel" required class="form-control" id="contact_form" name="client_contact" placeholder="Contact" autocomplete="off">
+              </div>
+            <button type="submit" class="btn btn-primary" style="background-color: #03045e;">Create client</button>
+
+          </form>
+          <!--End of create client-->
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="view_clients_heading">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#view_clients" aria-expanded="false" aria-controls="collapseThree">
+              <h4 class="primary-color"2>View Clients</h4>
+            </button>
+          </h5>
+        </div>
+        <div id="view_clients" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+              <!--View clients-->
+              
+              <ul class="list-group">
+                {% for client in clients %}
+                  <li class="list-group-item">{{client.name}}:{{client.contact}}(buying price)</li>
+                {% empty %}
+                <i>No products at the moment</i>
+                {% endfor %}
+              </ul>
+    
+              <hr>
+              <!--End of view clients-->
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="create_product_heading">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#create_product" aria-expanded="false" aria-controls="collapseTwo">
+              <h4 class="primary-color">Create Product</h4>
+            </button>
+          </h5>
+        </div>
+        <div id="create_product" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+              <!--Create Product-->
+              
+              <form  method="post" action="{% url 'project' project.id %}" id="createProduct_form">
+                <input hidden name="form" value="createProduct_form">
+                {% csrf_token %}
+
+                <div class="mb-3" id="div_product_name">
+                  <input type="text" required class="form-control" id="name_form" name="product_name" placeholder="Name" autocomplete="off">
+                </div>
+                <div class="mb-3" id="div_product_buying_price">
+                  <input type="number"required class="form-control" id="buying_price_form" name="buying_price" placeholder="Buying price" autocomplete="off">
+                </div>
+
+                <div class="mb-3" id="div_prodct_selling_price">
+                    <input type="number" required class="form-control" id="selling_price_form" name="selling_price" placeholder="Selling price" autocomplete="off">
+                  </div>
+                <button type="submit" class="btn btn-primary" style="background-color: #03045e;">Create Product</button>
+
+              </form>
+              <!--End of create product-->
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header" id="view_products_heading">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#view_products" aria-expanded="false" aria-controls="collapseThree">
+              <h4 class="primary-color">View Produtcs</h4>
+            </button>
+          </h5>
+        </div>
+        <div id="view_products" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+           <!--View Products-->
+          
+          <ul class="list-group">
+            {% for product in products %}
+              <li class="list-group-item">{{product.name}}:{{product.buying_price}}(buying price), {{product.selling_price}}(selling price)</li>
+            {% empty %}
+            <i>No products at the moment</i>
+            {% endfor %}
+          </ul>
+
+          <hr>
+          <!--End of view product-->
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="create_activity_heading">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#create_activity" aria-expanded="false" aria-controls="collapseThree">
+              <h4 class="primary-color">Create Activity</h4>
+            </button>
+          </h5>
+        </div>
+        <div id="create_activity" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+          <div class="card-body">
+            <!--Create Activity-->
+            
+
+            <form  method="post" action="{% url 'project' project.id %}" id="createActivity_form" name="createActivity_form">
+                {% csrf_token %}
+
+                <input hidden name="form" value="createActivity_form">
+                <div class="mb-3" id="div_type">
+                  <label for="type" class="form-label">Activity type:</label>
+                  <select  name="type" id="type" class="form-select" aria-label="Default select example">
+                    <option selected value="custom">Custom</option>
+                    <option value="deposit">Deposit</option>
+                    <option value="withdraw">Withdraw</option>
+                    <option value="purchase">Purchase</option>
+                    <option value="refund">Refund</option>
+                  </select>
+                </div>
+
+                <div class="mb-3" id="div_product" style="display: none;">
+                  <label for="type" class="form-label">Product:</label>
+                  <select  name="product" id="type" class="form-select" aria-label="Default select example">
+                    <option selected ></oprtion>
+                    {% for product in products %}
+                    <option  value="{{product.id}}">{{product.name}}</option>
+                    {% empty%}
+                    <option>No products, create them</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
+                <div class="mb-3" id="div_client" style="display: none;">
+                  <label for="type" class="form-label">Client:</label>
+                  <select  name="client" id="type" class="form-select" aria-label="Default select example">
+                    <option selected ></oprtion>
+                      {% for client in clients %}
+                      <option  value="{{client.id}}">{{client.name}}</option>
+                      {% empty%}
+                      <option>No clients, create them</option>
+                      {% endfor %}
+                  </select>
+                </div>
+
+
+
+                <div class="mb-3" id="div_color" style="display: none;">
+                  <input type="text" list="colors" class="form-control" id="color_form" name="color" placeholder="Color" autocomplete="off">
+                  <datalist id="colors">
+                    <option>black</option>
+                    <option>white</option>
+                    <option>blue</option>
+                    <option>red</option>
+                    <option>green</option>
+                    <option>pink</option>
+                    <option>purple</option>
+                    <option>gray</option>
+                  </datalist>
+                </div>
+                
+                
+
+                <div class="mb-3" id="div_name">
+                  <input type="text" required class="form-control" id="name_form" name="name" placeholder="Name" autocomplete="off">
+                </div>
+
+                <div class="mb-3" id="div_description">
+                  <textarea form="createActivity_form" required class="form-control" id="description_form" rows="3" name="description" placeholder="Description"></textarea>
+                </div>
+                
+                <div class="mb-3" id="div_participants">
+                  <label for="members_form" class="form-label">Participants:</label><br>
+                  <select id="members_form" required class="form-select" aria-label="multiple select example" name="participants" multiple>
+                    {% for member in project.members.all %}
+                    <option value="{{member.id}}">{{member.username}}</option>
+                    {% endfor %}
+                  </select>
+                  <i>ps:To select/unselect multiple participants click while pressing ctrl-key</i>
+                </div>
+
+                <div class="mb-3" id="div_investement">
+                  <input type="number"required class="form-control" id="investement_form" name="investement" placeholder="Investement" autocomplete="off">
+                </div>
+
+                <div class="mb-3" id="div_gain">
+                    <input type="number" required class="form-control" id="gain_form" name="gain" placeholder="Gain" autocomplete="off">
+                  </div>
+                <button type="submit" class="btn btn-primary" style="background-color: #03045e;">Create activity</button>
+          
+              </form>
+            <!--End of create activity-->
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="view_activities_heading>
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#view_activities" aria-expanded="false" aria-controls="collapseThree">
+              <h4 class="primary-color"2>View Activities</h4>
+            </button>
+          </h5>
+        </div>
+        <div id="view_activities" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+          <div class="card-body">
+              <!--View Activities-->
+              
+              <div class="card" >
+                {% for activity in activities.all %}
+                <div class="card-body">
+                  <h5 class="card-title primary-color">{{activity.name}}</h5>
+                  <hr>
+                  <q>{{activity.description}}</q><br>
+                  <i>Members: {% for participant in activity.participants.all %}{{participant}}; {% endfor %}</i><br>
+                  <i>Investement:{{activity.investement}}, Gain:{{activity.gain}}</i>
+                </div>
+                {% empty %}
+                <i>No activities at the moment</i>
+                {% endfor %}
+              </div>
+              <hr>
+              <!--End of view activity-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+
+
+
+    
+  </div>
+
+    
+{% endblock %}
